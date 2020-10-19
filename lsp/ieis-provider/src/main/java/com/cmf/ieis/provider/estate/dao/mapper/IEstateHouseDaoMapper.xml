@@ -1,0 +1,414 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmf.ieis.provider.estate.dao.mapper.IEstateHouseDaoMapper">
+    <resultMap id="EstateHouseMap" type="com.cmf.ieis.provider.estate.domain.EstateHouse">
+        <id property="id" column="id"/>
+        <result property="apartmentLayout" column="apartmentLayout"/>
+        <result property="cityCode" column="cityCode"/>
+        <result property="contact" column="contact"/>
+        <result property="countyCode" column="countyCode"/>
+        <result property="decorationStatus" column="decorationStatus"/>
+        <result property="deliveryTime" column="deliveryTime"/>
+        <result property="description" column="description"/>
+        <result property="detailedAddress" column="detailedAddress"/>
+        <result property="elevator" column="elevator"/>
+        <result property="floor" column="floor"/>
+        <result property="floorArea" column="floorArea"/>
+        <result property="memberId" column="memberId"/>
+        <result property="name" column="name"/>
+        <result property="neighbourhood" column="neighbourhood"/>
+        <result property="price" column="price"/>
+        <result property="propertyRight" column="propertyRight"/>
+        <result property="provinceCode" column="provinceCode"/>
+        <result property="roomAttribute" column="roomAttribute"/>
+        <result property="roomType" column="roomType"/>
+        <result property="telephone" column="telephone"/>
+        <result property="townCode" column="townCode"/>
+        <result property="type" column="type"/>
+
+        <association property="estateHouseRental" javaType="com.cmf.ieis.provider.estate.domain.EstateHouseRental">
+            <id property="id" column="rentalId"/>
+            <result property="houseAllocation" column="houseAllocation"/>
+            <result property="leaseTerm" column="leaseTerm"/>
+            <result property="payType" column="payType"/>
+            <result property="price" column="rentalPrice"/>
+            <result property="rentalType" column="rentalType"/>
+            <result property="roomType" column="roomType"/>
+        </association>
+
+        <association property="estateHouseShop" javaType="com.cmf.ieis.provider.estate.domain.EstateHouseShop">
+            <id property="id" column="shopId"/>
+            <result property="customerFlow" column="customerFlow"/>
+            <result property="houseAllocation" column="shopHouseAllocation"/>
+            <result property="remainingLeaseTerm" column="remainingLeaseTerm"/>
+            <result property="shopType" column="shopType"/>
+            <result property="status" column="status"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.cmf.ieis.provider.estate.domain.EstateHouse">
+        insert into
+        ieis_estate_house
+        (`apartmentLayout`
+        ,`cityCode`
+        ,`contact`
+        ,`countyCode`
+        ,`decorationStatus`
+        ,`deliveryTime`
+        ,`description`
+        ,`detailedAddress`
+        ,`elevator`
+        ,`floor`
+        ,`floorArea`
+        ,`id`
+        ,`memberId`
+        ,`name`
+        ,`neighbourhood`
+        ,`price`
+        ,`propertyRight`
+        ,`provinceCode`
+        ,`roomAttribute`
+        ,`roomType`
+        ,`telephone`
+        ,`townCode`
+        ,`type`
+        )
+        values
+        (#{apartmentLayout}
+        ,#{cityCode}
+        ,#{contact}
+        ,#{countyCode}
+        ,#{decorationStatus}
+        ,#{deliveryTime}
+        ,#{description}
+        ,#{detailedAddress}
+        ,#{elevator}
+        ,#{floor}
+        ,#{floorArea}
+        ,#{id}
+        ,#{memberId}
+        ,#{name}
+        ,#{neighbourhood}
+        ,#{price}
+        ,#{propertyRight}
+        ,#{provinceCode}
+        ,#{roomAttribute}
+        ,#{roomType}
+        ,#{telephone}
+        ,#{townCode}
+        ,#{type}
+        );
+        <!--租赁从表-->
+        <if test="estateHouseRental != null ">
+            insert into
+            ieis_estate_house_rental
+            (`id`
+            ,`houseAllocation`
+            ,`leaseTerm`
+            ,`payType`
+            ,`price`
+            ,`rentalType`
+            ,`roomType`
+            )
+            values
+            (#{id}
+            ,#{estateHouseRental.houseAllocation}
+            ,#{estateHouseRental.leaseTerm}
+            ,#{estateHouseRental.payType}
+            ,#{estateHouseRental.price}
+            ,#{estateHouseRental.rentalType}
+            ,#{estateHouseRental.roomType}
+            )
+        </if>
+
+        <!--商铺信息从表从表-->
+        <if test="estateHouseShop != null ">
+            insert into
+            ieis_estate_house_shop
+            (`customerFlow`
+            ,`houseAllocation`
+            ,`id`
+            ,`remainingLeaseTerm`
+            ,`shopType`
+            ,`status`
+            )
+            values
+            (#{estateHouseShop.customerFlow}
+            ,#{estateHouseShop.houseAllocation}
+            ,#{id}
+            ,#{estateHouseShop.remainingLeaseTerm}
+            ,#{estateHouseShop.shopType}
+            ,#{estateHouseShop.status}
+            )
+        </if>
+    </insert>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from ieis_estate_house where id in
+        <foreach item="id" collection="list " open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+
+        delete from ieis_estate_house_rental where id in
+        <foreach item="id" collection="list " open="(" separator="," close=")">
+            #{id}
+        </foreach>;
+
+        delete from ieis_estate_house_shop where id in
+        <foreach item="id" collection="list " open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="com.cmf.ieis.provider.estate.domain.EstateHouse">
+        update ieis_estate_house set
+        `apartmentLayout` = #{apartmentLayout}
+         ,`cityCode` = #{cityCode}
+         ,`contact` = #{contact}
+         ,`countyCode` = #{countyCode}
+         ,`decorationStatus` = #{decorationStatus}
+         ,`deliveryTime` = #{deliveryTime}
+         ,`description` = #{description}
+         ,`detailedAddress` = #{detailedAddress}
+         ,`elevator` = #{elevator}
+         ,`floor` = #{floor}
+         ,`floorArea` = #{floorArea}
+         ,`memberId` = #{memberId}
+         ,`name` = #{name}
+         ,`neighbourhood` = #{neighbourhood}
+         ,`price` = #{price}
+         ,`propertyRight` = #{propertyRight}
+         ,`provinceCode` = #{provinceCode}
+         ,`roomAttribute` = #{roomAttribute}
+         ,`roomType` = #{roomType}
+         ,`telephone` = #{telephone}
+         ,`townCode` = #{townCode}
+         ,`type` = #{type}
+        where id= #{id};
+
+        update ieis_estate_house_rental set
+        `houseAllocation` = #{estateHouseRental.houseAllocation}
+         ,`leaseTerm` = #{estateHouseRental.leaseTerm}
+         ,`payType` = #{estateHouseRental.payType}
+         ,`price` = #{estateHouseRental.price}
+         ,`rentalType` = #{estateHouseRental.rentalType}
+         ,`roomType` = #{estateHouseRental.roomType}
+         where id= #{id};
+
+         update ieis_estate_house_shop set
+        `customerFlow` = #{estateHouseShop.customerFlow}
+        ,`houseAllocation` = #{estateHouseShop.houseAllocation}
+        ,`remainingLeaseTerm` = #{estateHouseShop.remainingLeaseTerm}
+        ,`shopType` = #{estateHouseShop.shopType}
+        ,`status` = #{estateHouseShop.status}
+        where id= #{id};
+    </update>
+
+    <select id="findById" parameterType="java.lang.String" resultType="com.cmf.ieis.provider.estate.domain.EstateHouse">
+        SELECT
+          ieh.`apartmentLayout`
+        ,ieh.`cityCode`
+        ,ieh.`contact`
+        ,ieh.`countyCode`
+        ,ieh.`decorationStatus`
+        ,ieh.`deliveryTime`
+        ,ieh.`description`
+        ,ieh.`detailedAddress`
+        ,ieh.`elevator`
+        ,ieh.`floor`
+        ,ieh.`floorArea`
+        ,ieh.`id`
+        ,ieh.`memberId`
+        ,ieh.`name`
+        ,ieh.`neighbourhood`
+        ,ieh.`price`
+        ,ieh.`propertyRight`
+        ,ieh.`provinceCode`
+        ,ieh.`roomAttribute`
+        ,ieh.`roomType`
+        ,ieh.`telephone`
+        ,ieh.`townCode`
+        ,ieh.`type`
+        ,iehr.`id` rentalId
+        ,iehr.`houseAllocation`
+        ,iehr.`leaseTerm`
+        ,iehr.`payType`
+        ,iehr.`price` rentalPrice
+        ,iehr.`rentalType`
+        ,iehr.`roomType`
+        ,iehs.`id` shopId
+        ,iehs.`customerFlow`
+        ,iehs.`houseAllocation` shopHouseAllocation
+        ,iehs.`remainingLeaseTerm`
+        ,iehs.`shopType`
+        ,iehs.`status`
+        FROM
+        ieis_estate_house ieh
+        left join ieis_estate_house_rental iehr on ieh.id = iehr.id
+        left join ieis_estate_house_shop iehs on ieh.id = iehs.id
+        where
+        ieh.id = #{id}
+    </select>
+
+    <!--  查询全部用户信息 -->
+    <select id="findAll" resultMap="EstateHouseMap">
+        SELECT
+         ieh.`apartmentLayout`
+        ,ieh.`cityCode`
+        ,ieh.`contact`
+        ,ieh.`countyCode`
+        ,ieh.`decorationStatus`
+        ,ieh.`deliveryTime`
+        ,ieh.`description`
+        ,ieh.`detailedAddress`
+        ,ieh.`elevator`
+        ,ieh.`floor`
+        ,ieh.`floorArea`
+        ,ieh.`id`
+        ,ieh.`memberId`
+        ,ieh.`name`
+        ,ieh.`neighbourhood`
+        ,ieh.`price`
+        ,ieh.`propertyRight`
+        ,ieh.`provinceCode`
+        ,ieh.`roomAttribute`
+        ,ieh.`roomType`
+        ,ieh.`telephone`
+        ,ieh.`townCode`
+        ,ieh.`type`
+        ,iehr.`id` rentalId
+        ,iehr.`houseAllocation`
+        ,iehr.`leaseTerm`
+        ,iehr.`payType`
+        ,iehr.`price` rentalPrice
+        ,iehr.`rentalType`
+        ,iehr.`roomType`
+        ,iehs.`id` shopId
+        ,iehs.`customerFlow`
+        ,iehs.`houseAllocation` shopHouseAllocation
+        ,iehs.`remainingLeaseTerm`
+        ,iehs.`shopType`
+        ,iehs.`status`
+        FROM
+        ieis_estate_house ieh
+        left join ieis_estate_house_rental iehr on ieh.id = iehr.id
+        left join ieis_estate_house_shop iehs on ieh.id = iehs.id
+    </select>
+
+    <!--  查询全部用户信息 -->
+    <select id="findByCondition" parameterType="com.cmf.ieis.provider.estate.domain.EstateHouse"
+            resultMap="EstateHouseMap">
+        SELECT
+        ieh.`apartmentLayout`
+        ,ieh.`cityCode`
+        ,ieh.`contact`
+        ,ieh.`countyCode`
+        ,ieh.`decorationStatus`
+        ,ieh.`deliveryTime`
+        ,ieh.`description`
+        ,ieh.`detailedAddress`
+        ,ieh.`elevator`
+        ,ieh.`floor`
+        ,ieh.`floorArea`
+        ,ieh.`id`
+        ,ieh.`memberId`
+        ,ieh.`name`
+        ,ieh.`neighbourhood`
+        ,ieh.`price`
+        ,ieh.`propertyRight`
+        ,ieh.`provinceCode`
+        ,ieh.`roomAttribute`
+        ,ieh.`roomType`
+        ,ieh.`telephone`
+        ,ieh.`townCode`
+        ,ieh.`type`
+        ,iehr.`id` rentalId
+        ,iehr.`houseAllocation`
+        ,iehr.`leaseTerm`
+        ,iehr.`payType`
+        ,iehr.`price` rentalPrice
+        ,iehr.`rentalType`
+        ,iehr.`roomType`
+        ,iehs.`id` shopId
+        ,iehs.`customerFlow`
+        ,iehs.`houseAllocation` shopHouseAllocation
+        ,iehs.`remainingLeaseTerm`
+        ,iehs.`shopType`
+        ,iehs.`status`
+        FROM
+        ieis_estate_house ieh
+        left join ieis_estate_house_rental iehr on ieh.id = iehr.id
+        left join ieis_estate_house_shop iehs on ieh.id = iehs.id
+        where
+        1 = 1
+        <if test="apartmentLayout != null and apartmentLayout != '' ">
+            and `apartmentLayout` like CONCAT('%',#{apartmentLayout},'%')
+        </if>
+        <if test="cityCode != null and cityCode != '' ">
+            and `cityCode` like CONCAT('%',#{cityCode},'%')
+        </if>
+        <if test="contact != null and contact != '' ">
+            and `contact` like CONCAT('%',#{contact},'%')
+        </if>
+        <if test="countyCode != null and countyCode != '' ">
+            and `countyCode` like CONCAT('%',#{countyCode},'%')
+        </if>
+        <if test="decorationStatus != null and decorationStatus != '' ">
+            and `decorationStatus` like CONCAT('%',#{decorationStatus},'%')
+        </if>
+        <if test="deliveryTime != null and deliveryTime != '' ">
+            and `deliveryTime` like CONCAT('%',#{deliveryTime},'%')
+        </if>
+        <if test="description != null and description != '' ">
+            and `description` like CONCAT('%',#{description},'%')
+        </if>
+        <if test="detailedAddress != null and detailedAddress != '' ">
+            and `detailedAddress` like CONCAT('%',#{detailedAddress},'%')
+        </if>
+        <if test="elevator != null and elevator != '' ">
+            and `elevator` like CONCAT('%',#{elevator},'%')
+        </if>
+        <if test="floor != null and floor != '' ">
+            and `floor` like CONCAT('%',#{floor},'%')
+        </if>
+        <if test="floorArea != null and floorArea != '' ">
+            and `floorArea` like CONCAT('%',#{floorArea},'%')
+        </if>
+        <if test="id != null and id != '' ">
+            and `id` = #{id}
+        </if>
+        <if test="memberId != null and memberId != '' ">
+            and `memberId` = #{memberId}
+        </if>
+        <if test="name != null and name != '' ">
+            and `name` like CONCAT('%',#{name},'%')
+        </if>
+        <if test="neighbourhood != null and neighbourhood != '' ">
+            and `neighbourhood` like CONCAT('%',#{neighbourhood},'%')
+        </if>
+        <if test="price != null and price != '' ">
+            and `price` like CONCAT('%',#{price},'%')
+        </if>
+        <if test="propertyRight != null and propertyRight != '' ">
+            and `propertyRight` like CONCAT('%',#{propertyRight},'%')
+        </if>
+        <if test="provinceCode != null and provinceCode != '' ">
+            and `provinceCode` like CONCAT('%',#{provinceCode},'%')
+        </if>
+        <if test="roomAttribute != null and roomAttribute != '' ">
+            and `roomAttribute` like CONCAT('%',#{roomAttribute},'%')
+        </if>
+        <if test="roomType != null and roomType != '' ">
+            and `roomType` like CONCAT('%',#{roomType},'%')
+        </if>
+        <if test="telephone != null and telephone != '' ">
+            and `telephone` like CONCAT('%',#{telephone},'%')
+        </if>
+        <if test="townCode != null and townCode != '' ">
+            and `townCode` like CONCAT('%',#{townCode},'%')
+        </if>
+        <if test="type != null and type != '' ">
+            and `type` like CONCAT('%',#{type},'%')
+        </if>
+        ;
+    </select>
+</mapper>

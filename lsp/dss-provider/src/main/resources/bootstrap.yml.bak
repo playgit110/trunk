@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: ids-provide
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIG-SERVER
+      profile: dev
+  rabbitmq:
+    host: 49.234.216.132
+    port: 2300
+    username: guest
+    password: guest
+#---------------------eureka---------------------
+eureka:
+  client:
+    service-url:
+      defaultZone: http://49.235.164.99:3101/eureka/
+      #defaultZone: http://eureka:123456@49.235.164.99:3101/eureka/

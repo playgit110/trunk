@@ -1,0 +1,176 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmf.dss.provider.dss.dao.mapper.IServicesDaoMapper">
+    <resultMap id="ServicesMap" type="com.cmf.dss.provider.dss.domain.Services">
+         <result property="cityCode" column="cityCode"/>
+ <result property="contact" column="contact"/>
+ <result property="countyCode" column="countyCode"/>
+ <result property="detailedAddress" column="detailedAddress"/>
+ <result property="id" column="id"/>
+ <result property="memberId" column="memberId"/>
+ <result property="provinceCode" column="provinceCode"/>
+ <result property="serviceItems" column="serviceItems"/>
+ <result property="telephone" column="telephone"/>
+ <result property="title" column="title"/>
+ <result property="townCode" column="townCode"/>
+ <result property="type" column="type"/>
+
+    </resultMap>
+
+    <insert id="insert" parameterType="com.cmf.dss.provider.dss.domain.Services">
+        insert into
+        dss_services
+        (`cityCode`
+,`contact`
+,`countyCode`
+,`detailedAddress`
+,`id`
+,`memberId`
+,`provinceCode`
+,`serviceItems`
+,`telephone`
+,`title`
+,`townCode`
+,`type`
+)
+        values
+        (#{cityCode}
+,#{contact}
+,#{countyCode}
+,#{detailedAddress}
+,#{id}
+,#{memberId}
+,#{provinceCode}
+,#{serviceItems}
+,#{telephone}
+,#{title}
+,#{townCode}
+,#{type}
+)
+    </insert>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from dss_services where id in
+        <foreach item="id" collection="list " open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="com.cmf.dss.provider.dss.domain.Services">
+        update dss_services set
+        `cityCode` = #{cityCode}
+,`contact` = #{contact}
+,`countyCode` = #{countyCode}
+,`detailedAddress` = #{detailedAddress}
+,`id` = #{id}
+,`memberId` = #{memberId}
+,`provinceCode` = #{provinceCode}
+,`serviceItems` = #{serviceItems}
+,`telephone` = #{telephone}
+,`title` = #{title}
+,`townCode` = #{townCode}
+,`type` = #{type}
+
+        where id= #{id}
+    </update>
+
+    <select id="findById" parameterType="java.lang.String" resultType="com.cmf.dss.provider.dss.domain.Services">
+        SELECT
+        `cityCode`
+,`contact`
+,`countyCode`
+,`detailedAddress`
+,`id`
+,`memberId`
+,`provinceCode`
+,`serviceItems`
+,`telephone`
+,`title`
+,`townCode`
+,`type`
+
+        FROM
+        dss_services
+        where
+        id = #{id}
+    </select>
+
+    <!--  查询全部用户信息 -->
+    <select id="findAll" resultMap="ServicesMap">
+        SELECT
+        `cityCode`
+,`contact`
+,`countyCode`
+,`detailedAddress`
+,`id`
+,`memberId`
+,`provinceCode`
+,`serviceItems`
+,`telephone`
+,`title`
+,`townCode`
+,`type`
+
+        FROM
+        dss_services;
+    </select>
+
+    <!--  查询全部用户信息 -->
+    <select id="findByCondition" parameterType="com.cmf.dss.provider.dss.domain.Services" resultMap="ServicesMap">
+        SELECT
+        `cityCode`
+,`contact`
+,`countyCode`
+,`detailedAddress`
+,`id`
+,`memberId`
+,`provinceCode`
+,`serviceItems`
+,`telephone`
+,`title`
+,`townCode`
+,`type`
+
+        FROM
+        dss_services
+        where
+        1 = 1
+         <if test="cityCode != null and cityCode != '' "> 
+ and `cityCode` like CONCAT('%',#{cityCode},'%')
+</if>
+ <if test="contact != null and contact != '' "> 
+ and `contact` like CONCAT('%',#{contact},'%')
+</if>
+ <if test="countyCode != null and countyCode != '' "> 
+ and `countyCode` like CONCAT('%',#{countyCode},'%')
+</if>
+ <if test="detailedAddress != null and detailedAddress != '' "> 
+ and `detailedAddress` like CONCAT('%',#{detailedAddress},'%')
+</if>
+ <if test="id != null and id != '' "> 
+ and `id` like CONCAT('%',#{id},'%')
+</if>
+ <if test="memberId != null and memberId != '' "> 
+ and `memberId` like CONCAT('%',#{memberId},'%')
+</if>
+ <if test="provinceCode != null and provinceCode != '' "> 
+ and `provinceCode` like CONCAT('%',#{provinceCode},'%')
+</if>
+ <if test="serviceItems != null and serviceItems != '' "> 
+ and `serviceItems` like CONCAT('%',#{serviceItems},'%')
+</if>
+ <if test="telephone != null and telephone != '' "> 
+ and `telephone` like CONCAT('%',#{telephone},'%')
+</if>
+ <if test="title != null and title != '' "> 
+ and `title` like CONCAT('%',#{title},'%')
+</if>
+ <if test="townCode != null and townCode != '' "> 
+ and `townCode` like CONCAT('%',#{townCode},'%')
+</if>
+ <if test="type != null and type != '' "> 
+ and `type` like CONCAT('%',#{type},'%')
+</if>
+
+        ;
+    </select>
+</mapper>
